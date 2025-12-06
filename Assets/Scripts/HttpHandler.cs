@@ -49,7 +49,7 @@ public class HttpHandler : MonoBehaviour
             GameObject.Find("Notes").GetComponent<PlayAllPerfect>().enabled = false;
             GameObject.Find("MultTouchHandler").GetComponent<MultTouchHandler>().clearSlots();
 
-            bgManager.LoadBGFromPath(new FileInfo(data.jsonPath).DirectoryName, data.audioSpeed);
+            bgManager.LoadBGFromPath(new FileInfo(data.jsonPath).DirectoryName, data.audioSpeed, data.moviePath);
             bgCover.color = new Color(0f, 0f, 0f, data.backgroundCover);
         }
 
@@ -64,7 +64,7 @@ public class HttpHandler : MonoBehaviour
             loader.LoadJson(File.ReadAllText(data.jsonPath), data.startTime);
             GameObject.Find("MultTouchHandler").GetComponent<MultTouchHandler>().clearSlots();
 
-            bgManager.LoadBGFromPath(new FileInfo(data.jsonPath).DirectoryName, data.audioSpeed);
+            bgManager.LoadBGFromPath(new FileInfo(data.jsonPath).DirectoryName, data.audioSpeed, data.moviePath);
             bgCover.color = new Color(0f, 0f, 0f, data.backgroundCover);
             bgManager.PlaySongDetail();
         }
@@ -85,7 +85,7 @@ public class HttpHandler : MonoBehaviour
             screenRecorder.CutoffTime += 10f;
             screenRecorder.StartRecording(maidataPath);
 
-            bgManager.LoadBGFromPath(maidataPath, data.audioSpeed);
+            bgManager.LoadBGFromPath(maidataPath, data.audioSpeed, data.moviePath);
             bgCover.color = new Color(0f, 0f, 0f, data.backgroundCover);
             bgManager.PlaySongDetail();
             GameObject.Find("CanvasButtons").SetActive(false);

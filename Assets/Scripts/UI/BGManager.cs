@@ -70,8 +70,28 @@ public class BGManager : MonoBehaviour
     }
 
 
-    public void LoadBGFromPath(string path, float speed)
+    public void LoadBGFromPath(string path, float speed, string specifiedVideoPath = null)
     {
+        // First, try to load specified video if provided
+        if (!string.IsNullOrEmpty(specifiedVideoPath))
+        {
+            string videoFullPath = specifiedVideoPath;
+            if (!Path.IsPathRooted(specifiedVideoPath))
+            {
+                videoFullPath = Path.Combine(path, specifiedVideoPath);
+            }
+            
+            if (File.Exists(videoFullPath))
+            {
+                loadVideo(videoFullPath, speed);
+                return;
+            }
+            else
+            {
+                Debug.LogWarning($"Specified video not found: {videoFullPath}, falling back to auto search");
+            }
+        }
+
         var pictureName = new[] { "Cover", "bg" };
         var pictureExt = new[] { ".png", ".jpg", ".jpeg" };
 
