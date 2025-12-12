@@ -44,8 +44,17 @@ public class BGManager : MonoBehaviour
             return;
         }
 
-        if (delta < -0.01f)
+        else if (delta < -0.2f)
+            videoPlayer.playbackSpeed = playSpeed + 10.0f;
+        else if (delta < -0.1f)
+            videoPlayer.playbackSpeed = playSpeed + 3.0f;
+        else if (delta < -0.01f)
             videoPlayer.playbackSpeed = playSpeed + 0.2f;
+        
+        else if (delta > 0.2f)
+            videoPlayer.playbackSpeed = playSpeed - 10.0f;
+        else if (delta > 0.1f)
+            videoPlayer.playbackSpeed = playSpeed - 3.0f;
         else if (delta > 0.01f)
             videoPlayer.playbackSpeed = playSpeed - 0.2f;
         else
