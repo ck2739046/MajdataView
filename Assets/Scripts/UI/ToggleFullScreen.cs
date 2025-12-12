@@ -7,17 +7,24 @@ public class ToggleFullScreen : MonoBehaviour
 
     public void Start()
     {
+        // 确保程序始终以窗口模式启动
+        Screen.fullScreen = false;
+        
         dd = GameObject.Find("ResoDropdown").GetComponent<Dropdown>();
         dd.gameObject.SetActive(false);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) ToggleFullscreen();
+        // if (Input.GetKeyDown(KeyCode.Escape)) ToggleFullscreen();
     }
 
     public void ToggleFullscreen()
     {
+        // 禁用全屏切换功能
+        return;
+        
+        /*
         print("ToggleFullScreen");
         var resolutions = Screen.resolutions;
         if (Screen.fullScreen)
@@ -33,16 +40,24 @@ public class ToggleFullScreen : MonoBehaviour
         }
 
         Screen.fullScreenMode = FullScreenMode.FullScreenWindow;
+        */
     }
 
     public void DisplayDropdown()
     {
+        // 禁用分辨率下拉菜单显示
+        return;
+        /*
         dd.value = 999;
         dd.gameObject.SetActive(true);
+        */
     }
 
     public void SetResolution()
     {
+        // 禁用分辨率设置功能
+        return;
+        /*
         var i = dd.value;
         print(i);
         switch (i)
@@ -65,5 +80,6 @@ public class ToggleFullScreen : MonoBehaviour
         }
 
         dd.gameObject.SetActive(false);
+        */
     }
 }
