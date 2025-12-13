@@ -41,6 +41,12 @@ public class HttpHandler : MonoBehaviour
         {
             request = "";
             timeProvider.SetStartTime(data.startAt, data.startTime, data.audioSpeed);
+
+            // start async video load first
+            bgManager.LoadBGFromPath(new FileInfo(data.jsonPath).DirectoryName, data.audioSpeed, data.moviePath);
+            bgCover.color = new Color(0f, 0f, 0f, data.backgroundCover);
+
+            // then load chart
             loader.noteSpeed = (float)(107.25 / (71.4184491 * Mathf.Pow(data.noteSpeed + 0.9975f, -0.985558604f)));
             loader.touchSpeed = data.touchSpeed;
             loader.smoothSlideAnime = data.smoothSlideAnime;
@@ -48,9 +54,6 @@ public class HttpHandler : MonoBehaviour
             loader.LoadJson(File.ReadAllText(data.jsonPath), data.startTime);
             GameObject.Find("Notes").GetComponent<PlayAllPerfect>().enabled = false;
             GameObject.Find("MultTouchHandler").GetComponent<MultTouchHandler>().clearSlots();
-
-            bgManager.LoadBGFromPath(new FileInfo(data.jsonPath).DirectoryName, data.audioSpeed, data.moviePath);
-            bgCover.color = new Color(0f, 0f, 0f, data.backgroundCover);
         }
 
         if (data.control == EditorControlMethod.OpStart)
