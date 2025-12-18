@@ -66,6 +66,7 @@ internal class EditRequestjson
     public float touchSpeed;
     public bool smoothSlideAnime;
     public string moviePath;
+    public int appPort;
 }
 
 public enum EditorComboIndicator

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using UnityEngine;
@@ -98,6 +100,16 @@ public class HttpHandler : MonoBehaviour
         {
             timeProvider.isStart = false;
             bgManager.PauseVideo();
+
+            if (data.appPort != -1)
+            {
+                var responseData = new EditRequestjson
+                {
+                    control = EditorControlMethod.Pause,
+                    startTime = timeProvider.AudioTime
+                };
+                BroadcastToApp(JsonConvert.SerializeObject(responseData), data.appPort);
+            }
         }
 
         if (data.control == EditorControlMethod.Stop)
@@ -155,5 +167,25 @@ public class HttpHandler : MonoBehaviour
         }
 
         return length;
+    }
+
+    private void BroadcastToApp(string json, int port)
+    {
+        Task.Run(() =>
+        {
+            try
+            {
+                using (var udpClient = new UdpClient())
+                {
+                    var bytes = Encoding.UTF8.GetBytes(json);
+                    var endpoint = new IPEndPoint(IPAddress.Loopback, port);
+                    udpClient.Send(bytes, bytes.Length, endpoint);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.LogError($"[MajdataView] Failed to send to App: {ex.Message}");
+            }
+        });
     }
 }
