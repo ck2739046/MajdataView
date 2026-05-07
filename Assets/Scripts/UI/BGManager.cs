@@ -44,19 +44,15 @@ public class BGManager : MonoBehaviour
             return;
         }
 
-        else if (delta < -0.2f)
-            videoPlayer.playbackSpeed = playSpeed + 10.0f;
         else if (delta < -0.1f)
-            videoPlayer.playbackSpeed = playSpeed + 3.0f;
+            videoPlayer.playbackSpeed = playSpeed * 3.0f;
         else if (delta < -0.01f)
-            videoPlayer.playbackSpeed = playSpeed + 0.2f;
+            videoPlayer.playbackSpeed = playSpeed * 1.2f;
         
-        else if (delta > 0.2f)
-            videoPlayer.playbackSpeed = playSpeed - 10.0f;
         else if (delta > 0.1f)
-            videoPlayer.playbackSpeed = playSpeed - 3.0f;
+            videoPlayer.playbackSpeed = Mathf.Max(playSpeed / 3.0f, 0.1f); // 至少10%速度
         else if (delta > 0.01f)
-            videoPlayer.playbackSpeed = playSpeed - 0.2f;
+            videoPlayer.playbackSpeed = Mathf.Max(playSpeed / 1.2f, 0.1f); // 至少10%速度
         else
             videoPlayer.playbackSpeed = playSpeed;
     }
