@@ -107,9 +107,7 @@ public class SlideDrop : NoteLongDrop
             spriteRenderer_star.color = Color.white;
             star_slide.transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
 
-            var process = (LastFor - timing) / LastFor;
-            process = 1f - process;
-            if (process > 1)
+            if (LastFor <= 0f)
             {
                 // TODO: FES星星最后一个判定区箭头的消失效果
                 foreach (GameObject obj in slideBars)
@@ -134,10 +132,49 @@ public class SlideDrop : NoteLongDrop
 
                 Destroy(star_slide);
                 Destroy(gameObject);
+                return;
             }
 
-            //print(process);
-            var pos = (slidePositions.Count - 1) * process;
+            var rawProgress = timing / LastFor;
+            if (rawProgress >= 1f)
+            {
+                // TODO: FES星星最后一个判定区箭头的消失效果
+                foreach (GameObject obj in slideBars)
+                {
+                    obj.SetActive(false);
+                }
+
+                if (isGroupPartEnd)
+                {
+                    // 只有组内最后一个Slide完成 才会显示判定条并增加总数
+                    if (isBreak)
+                        GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>().breakCount++;
+                    else
+                        GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>().slideCount++;
+                    slideOK.SetActive(true);
+                }
+                else
+                {
+                    // 如果不是组内最后一个 那么也要将判定条删掉
+                    Destroy(slideOK);
+                }
+
+                Destroy(star_slide);
+                Destroy(gameObject);
+                return;
+            }
+
+            var moveProgress = isGroupPart ? GetHoldTailProgress(rawProgress) : rawProgress;
+            if (moveProgress >= 1f)
+            {
+                star_slide.transform.position = slidePositions[slidePositions.Count - 1];
+                applyStarRotation(slideRotations[slideRotations.Count - 1]);
+                for (var i = 0; i < slideBars.Count; i++) slideBars[i].SetActive(false);
+                return;
+            }
+
+            //print(moveProgress);
+            var pos = (slidePositions.Count - 1) * moveProgress;
             var index = (int)pos;
 
             // Slide的箭头消失到哪里
@@ -145,9 +182,10 @@ public class SlideDrop : NoteLongDrop
             if (smoothSlideAnime)
             {
                 slideAreaIndex = index + 1;
-            } else
+            }
+            else
             {
-                slideAreaIndex = areaStep[(int)(process * (areaStep.Count - 1))];
+                slideAreaIndex = areaStep[(int)(moveProgress * (areaStep.Count - 1))];
             }
 
             try

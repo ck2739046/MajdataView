@@ -166,9 +166,7 @@ public class WifiDrop : NoteLongDrop
 
         if (timing > 0f)
         {
-            var process = (LastFor - timing) / LastFor;
-            process = 1f - process;
-            if (process > 1)
+            if (LastFor <= 0f)
             {
                 foreach (GameObject obj in slideBars)
                 {
@@ -187,9 +185,54 @@ public class WifiDrop : NoteLongDrop
                 for (var i = 0; i < star_slide.Length; i++)
                     Destroy(star_slide[i]);
                 Destroy(gameObject);
+                return;
             }
 
-            var pos = (slideBars.Count - 1) * process;
+            var rawProgress = timing / LastFor;
+            if (rawProgress >= 1f)
+            {
+                foreach (GameObject obj in slideBars)
+                {
+                    obj.SetActive(false);
+                }
+
+                if (isGroupPartEnd)
+                {
+                    if (isBreak)
+                        GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>().breakCount++;
+                    else
+                        GameObject.Find("ObjectCounter").GetComponent<ObjectCounter>().slideCount++;
+                    slideOK.SetActive(true);
+                }
+                else
+                {
+                    Destroy(slideOK);
+                }
+
+                for (var i = 0; i < star_slide.Length; i++)
+                    Destroy(star_slide[i]);
+                Destroy(gameObject);
+                return;
+            }
+
+            var moveProgress = isGroupPart ? GetHoldTailProgress(rawProgress) : rawProgress;
+
+            for (var i = 0; i < star_slide.Length; i++)
+            {
+                spriteRenderer_star[i].color = Color.white;
+                star_slide[i].transform.position = moveProgress >= 1f
+                    ? SlidePositionEnd[i]
+                    : (SlidePositionEnd[i] - SlidePositionStart) * moveProgress + SlidePositionStart; //TODO add some runhua
+                star_slide[i].transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+            }
+
+            if (moveProgress >= 1f)
+            {
+                for (var i = 0; i < slideBars.Count; i++) slideBars[i].SetActive(false);
+                return;
+            }
+
+            var pos = (slideBars.Count - 1) * moveProgress;
             // Slide的箭头消失到哪里
             int slideAreaIndex;
             if (smoothSlideAnime)
@@ -198,15 +241,7 @@ public class WifiDrop : NoteLongDrop
             }
             else
             {
-                slideAreaIndex = areaStep[(int)(process * (areaStep.Count - 1))];
-            }
-
-            for (var i = 0; i < star_slide.Length; i++)
-            {
-                spriteRenderer_star[i].color = Color.white;
-                star_slide[i].transform.position =
-                    (SlidePositionEnd[i] - SlidePositionStart) * process + SlidePositionStart; //TODO add some runhua
-                star_slide[i].transform.localScale = new Vector3(1.5f, 1.5f, 1.5f);
+                slideAreaIndex = areaStep[(int)(moveProgress * (areaStep.Count - 1))];
             }
 
             for (var i = 0; i < slideAreaIndex; i++) slideBars[i].SetActive(false);

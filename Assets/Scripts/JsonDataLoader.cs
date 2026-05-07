@@ -7,6 +7,13 @@ using UnityEngine.UI;
 
 public class JsonDataLoader : MonoBehaviour
 {
+    // 让第一段 slide 提前开始移动
+    private const float SlideWaitBeatOffset = 0.04f;
+    // 让第一段 slide 提前到达终点
+    private const float FirstSegmentBeatCompensation = 0.04f;
+    // 让第二段及后续段 slide 整体提前开始移动
+    private const float SubsequentSegmentBeatOffset = 0.04f;
+
     public float noteSpeed = 7f;
     public float touchSpeed = 7.5f;
     public bool smoothSlideAnime = false;
@@ -575,6 +582,14 @@ public class JsonDataLoader : MonoBehaviour
             }
         }
 
+        // 对第二段及后续段 slide 添加整体时间偏移
+        var oneBeat = timing.currentBpm > 0f ? 60.0 / timing.currentBpm : 0.0;
+        var firstSegmentShift = oneBeat * SubsequentSegmentBeatOffset;
+        for (var i = 1; i < subSlide.Count; i++)
+        {
+            subSlide[i].slideStartTime -= firstSegmentShift;
+        }
+
         for (var i = subSlide.Count - 1; i >= 0; i--)
             if (note.noteContent.Contains('w')) //wifi
                 InstantiateWifi(timing, subSlide[i], i != 0, i == subSlide.Count - 1);
@@ -666,8 +681,18 @@ public class JsonDataLoader : MonoBehaviour
         WifiCompo.speed = noteSpeed * timing.HSpeed;
         WifiCompo.timeStart = (float)timing.time;
         WifiCompo.startPosition = note.startPosition;
-        WifiCompo.time = (float)note.slideStartTime;
-        WifiCompo.LastFor = (float)note.slideTime;
+        var startTime = (float)note.slideStartTime;
+        var duration = (float)note.slideTime;
+        if (!isGroupPart) // 仅对第一段生效
+        {
+            var headTime = (float)timing.time;
+            var oneBeat = timing.currentBpm > 0f ? 60f / timing.currentBpm : 0f;
+            var wait = Mathf.Max(0f, startTime - headTime);
+            startTime = headTime + Mathf.Max(0f, wait - oneBeat * SlideWaitBeatOffset);
+            duration = Mathf.Max(0f, duration - oneBeat * FirstSegmentBeatCompensation);
+        }
+        WifiCompo.time = startTime;
+        WifiCompo.LastFor = duration;
         WifiCompo.sortIndex = slideLayer;
         slideLayer += 5;
     }
@@ -776,8 +801,18 @@ public class JsonDataLoader : MonoBehaviour
         SliCompo.timeStar = (float)timing.time;
         SliCompo.startPosition = note.startPosition;
         SliCompo.star_slide = slide_star;
-        SliCompo.time = (float)note.slideStartTime;
-        SliCompo.LastFor = (float)note.slideTime;
+        var startTime = (float)note.slideStartTime;
+        var duration = (float)note.slideTime;
+        if (!isGroupPart) // 仅对第一段生效
+        {
+            var headTime = (float)timing.time;
+            var oneBeat = timing.currentBpm > 0f ? 60f / timing.currentBpm : 0f;
+            var wait = Mathf.Max(0f, startTime - headTime);
+            startTime = headTime + Mathf.Max(0f, wait - oneBeat * SlideWaitBeatOffset);
+            duration = Mathf.Max(0f, duration - oneBeat * FirstSegmentBeatCompensation);
+        }
+        SliCompo.time = startTime;
+        SliCompo.LastFor = duration;
         //SliCompo.sortIndex = -7000 + (int)((lastNoteTime - timing.time) * -100) + sort * 5;
         SliCompo.sortIndex = slideLayer++;
         slideLayer += 5;
