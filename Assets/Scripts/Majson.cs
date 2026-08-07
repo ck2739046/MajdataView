@@ -16,7 +16,7 @@ internal class SimaiTimingPoint
     public float currentBpm;
     public bool havePlayed;
     public float HSpeed = 1.0f;
-    public string notesContent;
+    public string noteContent;
     public List<SimaiNote> noteList = new();
     public int rawTextPositionX;
     public int rawTextPositionY;
@@ -67,7 +67,6 @@ internal class EditRequestjson
     public bool smoothSlideAnime;
     public string moviePath;
     public int appPort;
-    public string chartJson;
 }
 
 public enum EditorComboIndicator
