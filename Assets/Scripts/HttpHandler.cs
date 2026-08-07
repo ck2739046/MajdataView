@@ -45,7 +45,7 @@ public class HttpHandler : MonoBehaviour
             timeProvider.SetStartTime(data.startAt, data.startTime, data.audioSpeed);
 
             // start async video load first
-            bgManager.LoadBGFromPath(new FileInfo(data.jsonPath).DirectoryName, data.audioSpeed, data.moviePath);
+            bgManager.LoadBGFromPath(data.maidataPath, data.audioSpeed, data.moviePath);
             bgCover.color = new Color(0f, 0f, 0f, data.backgroundCover);
 
             // then load chart
@@ -69,7 +69,7 @@ public class HttpHandler : MonoBehaviour
             loader.LoadJson(File.ReadAllText(data.jsonPath), data.startTime);
             GameObject.Find("MultTouchHandler").GetComponent<MultTouchHandler>().clearSlots();
 
-            bgManager.LoadBGFromPath(new FileInfo(data.jsonPath).DirectoryName, data.audioSpeed, data.moviePath);
+            bgManager.LoadBGFromPath(data.maidataPath, data.audioSpeed, data.moviePath);
             bgCover.color = new Color(0f, 0f, 0f, data.backgroundCover);
             bgManager.PlaySongDetail();
         }
@@ -77,7 +77,6 @@ public class HttpHandler : MonoBehaviour
         if (data.control == EditorControlMethod.Record)
         {
             request = "";
-            var maidataPath = new FileInfo(data.jsonPath).DirectoryName;
             timeProvider.SetStartTime(data.startAt, data.startTime, data.audioSpeed, true);
             loader.noteSpeed = (float)(107.25 / (71.4184491 * Mathf.Pow(data.noteSpeed + 0.9975f, -0.985558604f)));
             loader.touchSpeed = data.touchSpeed;
@@ -88,9 +87,9 @@ public class HttpHandler : MonoBehaviour
 
             screenRecorder.CutoffTime = getChartLength();
             screenRecorder.CutoffTime += 10f;
-            screenRecorder.StartRecording(maidataPath);
+            screenRecorder.StartRecording(data.maidataPath);
 
-            bgManager.LoadBGFromPath(maidataPath, data.audioSpeed, data.moviePath);
+            bgManager.LoadBGFromPath(data.maidataPath, data.audioSpeed, data.moviePath);
             bgCover.color = new Color(0f, 0f, 0f, data.backgroundCover);
             bgManager.PlaySongDetail();
             GameObject.Find("CanvasButtons").SetActive(false);

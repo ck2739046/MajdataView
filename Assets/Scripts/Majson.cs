@@ -60,6 +60,7 @@ internal class EditRequestjson
     public EditorComboIndicator comboStatusType;
     public EditorControlMethod control;
     public string jsonPath;
+    public string maidataPath;
     public float noteSpeed;
     public long startAt;
     public float startTime;
