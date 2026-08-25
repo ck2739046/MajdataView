@@ -30,11 +30,13 @@ Write-Host "Target: $exeFullPath"
 Write-Host ""
 
 $buildDate = (Get-Date).ToString("yyyy.MM.dd_HH:mm:ss_UTCzzz")
-$copyright = "$([char]0x00A9) bbben & Simon273 $buildDate"
+$copyright = "$([char]0x00A9) Simon273 (og: bbben) $buildDate"
+$repositoryUrl = "https://github.com/ck2739046/MajdataView/tree/431-NC-TH"
 
 $props = @{
     "LegalCopyright"  = $copyright
-    "FileDescription" = "https://github.com/ck2739046/MajdataView/tree/431-NC-TH"
+    "Comments"        = $repositoryUrl
+    "CompanyName"     = "Simon273 (og: bbben)"
     "ProductName"     = "MajdataView"
 }
 
