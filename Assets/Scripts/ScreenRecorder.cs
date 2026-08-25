@@ -37,13 +37,6 @@ public class ScreenRecorder : MonoBehaviour
     {
         var timeProvider = GameObject.Find("AudioTimeProvider").GetComponent<AudioTimeProvider>();
         var bgManager = GameObject.Find("Background").GetComponent<BGManager>();
-        if (Screen.width % 2 != 0 || Screen.height % 2 != 0)
-        {
-            GameObject.Find("ErrText").GetComponent<Text>().text =
-                "无法开始编码，因为分辨率宽度或高度不是偶数。\nCan not start render because the width/height is not even.\n当前分辨率:" +
-                Screen.width + "x" + Screen.height + "\n";
-            yield break;
-        }
 
         if (File.Exists(maidata_path + "\\out.mp4"))
             File.Delete(maidata_path + "\\out.mp4");
