@@ -132,10 +132,10 @@ public class ObjectCounter : MonoBehaviour
         );
 
         rate.text = string.Format(
-            "FiNALE  Rate:\n" +
-            "{0:000.00}   %\n" +
+            "FiNALE Rate:\n" +
+            "{0:0.00}       %\n" +
             "DELUXE Rate:\n" +
-            "{1:000.0000} % ",
+            "{1:0.0000} %",
             Math.Truncate((float)FiNowScore() / FiSumScore() * 10000) / 100,
             Math.Truncate(((float)DxNowScore() / DxSumScore() * 100 + BreakRate()) * 10000) / 10000
         );
