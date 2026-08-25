@@ -119,12 +119,12 @@ public class ObjectCounter : MonoBehaviour
         var comboN = tapCount + holdCount + slideCount + touchCount + breakCount;
 
         table.text = string.Format(
-            "TAP: {0} / {5}\n" +
-            "HOD: {1} / {6}\n" +
-            "SLD: {2} / {7}\n" +
-            "TOH: {3} / {8}\n" +
-            "BRK: {4} / {9}\n" +
-            "ALL: {10} / {11}",
+            "{0} / {5}\n" +
+            "{1} / {6}\n" +
+            "{2} / {7}\n" +
+            "{3} / {8}\n" +
+            "{4} / {9}\n" +
+            "{10} / {11}",
             tapCount, holdCount, slideCount, touchCount, breakCount,
             tapSum, holdSum, slideSum, touchSum, breakSum,
             comboN,
