@@ -19,7 +19,7 @@ public class HttpHandler : MonoBehaviour
     {
         SceneManager.LoadScene(1);
         http.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
-        http.Prefixes.Add("http://localhost:8013/");
+        http.Prefixes.Add("http://127.0.0.1:8013/");
         http.Start();
         listen = new Task(httpListen);
         listen.Start();
